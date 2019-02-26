@@ -236,8 +236,8 @@ class Status < ApplicationRecord
     update_status_stat!(key => [public_send(key) - 1, 0].max)
   end
 
-  after_create  :increment_counter_caches
-  after_destroy :decrement_counter_caches
+  after_create_commit  :increment_counter_caches
+  after_destroy_commit :decrement_counter_caches
 
   after_create_commit :store_uri, if: :local?
   after_create_commit :update_statistics, if: :local?
@@ -426,7 +426,7 @@ class Status < ApplicationRecord
   end
 
   def store_uri
-    update_attribute(:uri, ActivityPub::TagManager.instance.uri_for(self)) if uri.nil?
+    update_column(:uri, ActivityPub::TagManager.instance.uri_for(self)) if uri.nil?
   end
 
   def prepare_contents
@@ -478,7 +478,7 @@ class Status < ApplicationRecord
     return if direct_visibility?
 
     account&.increment_count!(:statuses_count)
-    reblog&.increment_count!(:reblogs_count) if reblog?
+    reblog&.increment_count!(:reblogs_count) if reblog? && (public_visibility? || unlisted_visibility?)
     thread&.increment_count!(:replies_count) if in_reply_to_id.present? && (public_visibility? || unlisted_visibility?)
   end
 
@@ -486,7 +486,7 @@ class Status < ApplicationRecord
     return if direct_visibility? || marked_for_mass_destruction?
 
     account&.decrement_count!(:statuses_count)
-    reblog&.decrement_count!(:reblogs_count) if reblog?
+    reblog&.decrement_count!(:reblogs_count) if reblog? && (public_visibility? || unlisted_visibility?)
     thread&.decrement_count!(:replies_count) if in_reply_to_id.present? && (public_visibility? || unlisted_visibility?)
   end
 

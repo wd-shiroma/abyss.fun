@@ -100,13 +100,6 @@ class PublicTimeline extends React.PureComponent {
     dispatch(expandPublicTimeline({ maxId, onlyMedia }));
   }
 
-  handleSettingChanged = (key, checked) => {
-    const { columnId } = this.props;
-    if (!columnId && key[0] === 'other' && key[1] === 'onlyMedia') {
-      this.context.router.history.replace(`/timelines/public${checked ? '/media' : ''}`);
-    }
-  }
-
   render () {
     const { intl, shouldUpdateScroll, columnId, hasUnread, multiColumn, onlyMedia } = this.props;
     const pinned = !!columnId;
@@ -123,7 +116,7 @@ class PublicTimeline extends React.PureComponent {
           pinned={pinned}
           multiColumn={multiColumn}
         >
-          <ColumnSettingsContainer onChange={this.handleSettingChanged} columnId={columnId} />
+          <ColumnSettingsContainer columnId={columnId} />
         </ColumnHeader>
 
         <StatusListContainer
@@ -131,7 +124,7 @@ class PublicTimeline extends React.PureComponent {
           onLoadMore={this.handleLoadMore}
           trackScroll={!pinned}
           scrollKey={`public_timeline-${columnId}`}
-          emptyMessage={<FormattedMessage id='empty_column.public' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up' />}
+          emptyMessage={<FormattedMessage id='empty_column.public' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up' />}
           shouldUpdateScroll={shouldUpdateScroll}
         />
       </Column>
