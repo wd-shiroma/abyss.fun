@@ -189,6 +189,11 @@
   &--under-tabs {
     border-radius: 0 0 4px 4px;
   }
+
+  &--flexible {
+    box-sizing: border-box;
+    min-height: 100%;
+  }
 }
 
 .account-role {
@@ -282,4 +287,8 @@
   dl:last-child {
     border-bottom: 0;
   }
+}
+
+.directory__tag .trends__item__current {
+  width: auto;
 }
