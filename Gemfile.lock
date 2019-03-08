@@ -348,6 +348,8 @@ GEM
     msgpack (1.2.6)
     multi_json (1.13.1)
     multipart-post (2.0.0)
+    natto (1.1.2)
+      ffi (>= 1.9.0)
     necromancer (0.4.0)
     net-ldap (0.16.1)
     net-scp (1.2.1)
@@ -713,6 +715,7 @@ DEPENDENCIES
   memory_profiler
   microformats (~> 4.1)
   mime-types (~> 3.2)
+  natto
   net-ldap (~> 0.10)
   nokogiri (~> 1.10)
   nsa (~> 0.2)

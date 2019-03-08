@@ -147,3 +147,5 @@ group :production do
 end
 
 gem 'concurrent-ruby', require: false
+
+gem 'natto'
