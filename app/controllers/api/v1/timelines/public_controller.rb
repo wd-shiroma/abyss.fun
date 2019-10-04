@@ -41,7 +41,11 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def public_timeline_statuses
-    Status.as_public_timeline(current_account, truthy_param?(:local))
+    if truthy_param?(:local) then
+      Status.as_tag_timeline(Tag.find_by(name: 'メイドインアビス'), current_account, false)
+    else
+      Status.as_public_timeline(current_account, truthy_param?(:local))
+    end
   end
 
   def insert_pagination_headers
