@@ -519,8 +519,11 @@ const startWorker = (workerId) => {
   });
 
   app.get('/api/v1/streaming/public', (req, res) => {
+    const isLocal   = req.query.local === '1' || req.query.local === 'true';
     const onlyMedia = req.query.only_media === '1' || req.query.only_media === 'true';
-    const channel   = onlyMedia ? 'timeline:public:media' : 'timeline:public';
+    const channel   = isLocal ?
+        (onlyMedia ? 'timeline:hashtag:メイドインアビス:media' : 'timeline:hashtag:メイドインアビス') :
+        (onlyMedia ? 'timeline:public:media' : 'timeline:public');
 
     streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
@@ -594,13 +597,13 @@ const startWorker = (workerId) => {
       streamFrom('timeline:public', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:local':
-      streamFrom(`timeline:hashtag:${process.env.DEFAULT_HASHTAG.toLowerCase()}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      streamFrom('timeline:hashtag:メイドインアビス', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:media':
       streamFrom('timeline:public:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:local:media':
-      streamFrom(`timeline:hashtag:${process.env.DEFAULT_HASHTAG.toLowerCase()}:media`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      streamFrom('timeline:hashtag:メイドインアビス:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'direct':
       channel = `timeline:direct:${req.accountId}`;
