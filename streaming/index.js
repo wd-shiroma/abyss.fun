@@ -594,7 +594,7 @@ const startWorker = (workerId) => {
       streamFrom('timeline:public', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:local':
-      streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      streamFrom(`timeline:hashtag:${process.env.DEFAULT_HASHTAG.toLowerCase()}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
     case 'public:media':
       streamFrom('timeline:public:media', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
