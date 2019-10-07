@@ -527,7 +527,7 @@ const startWorker = (workerId) => {
 
   app.get('/api/v1/streaming/public/local', (req, res) => {
     const onlyMedia = req.query.only_media === '1' || req.query.only_media === 'true';
-    const channel   = onlyMedia ? 'timeline:hashtag:メイドインアビス:media' : 'timeline:hashtag:メイドインアビス';
+    const channel   = onlyMedia ? 'timeline:public:local:media' : 'timeline:public:local';
 
     streamFrom(channel, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
