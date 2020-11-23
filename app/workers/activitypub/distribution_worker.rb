@@ -13,7 +13,7 @@ class ActivityPub::DistributionWorker
     return if skip_distribution?
 
     ActivityPub::DeliveryWorker.push_bulk(inboxes) do |inbox_url|
-      [payload, @account.id, inbox_url]
+      [payload, @account.id, inbox_url, { synchronize_followers: !@status.distributable? }]
     end
 
     relay! if relayable?
@@ -43,7 +43,7 @@ class ActivityPub::DistributionWorker
   end
 
   def payload
-    @payload ||= Oj.dump(serialize_payload(@status, ActivityPub::ActivitySerializer, signer: @account))
+    @payload ||= Oj.dump(serialize_payload(ActivityPub::ActivityPresenter.from_status(@status), ActivityPub::ActivitySerializer, signer: @account))
   end
 
   def relay!

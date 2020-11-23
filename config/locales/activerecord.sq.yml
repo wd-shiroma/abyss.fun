@@ -1,6 +1,10 @@
 ---
 sq:
   activerecord:
+    attributes:
+      poll:
+        expires_at: Afat
+        options: Mundësi
     errors:
       models:
         account:

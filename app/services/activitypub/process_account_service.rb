@@ -18,9 +18,11 @@ class ActivityPub::ProcessAccountService < BaseService
 
     RedisLock.acquire(lock_options) do |lock|
       if lock.acquired?
-        @account        = Account.find_remote(@username, @domain)
-        @old_public_key = @account&.public_key
-        @old_protocol   = @account&.protocol
+        @account            = Account.remote.find_by(uri: @uri) if @options[:only_key]
+        @account          ||= Account.find_remote(@username, @domain)
+        @old_public_key     = @account&.public_key
+        @old_protocol       = @account&.protocol
+        @suspension_changed = false
 
         create_account if @account.nil?
         update_account
@@ -36,8 +38,9 @@ class ActivityPub::ProcessAccountService < BaseService
     after_protocol_change! if protocol_changed?
     after_key_change! if key_changed? && !@options[:signed_with_known_key]
     clear_tombstones! if key_changed?
+    after_suspension_change! if suspension_changed?
 
-    unless @options[:only_key]
+    unless @options[:only_key] || @account.suspended?
       check_featured_collection! if @account.featured_collection_url.present?
       check_links! unless @account.fields.empty?
     end
@@ -51,20 +54,23 @@ class ActivityPub::ProcessAccountService < BaseService
 
   def create_account
     @account = Account.new
-    @account.protocol     = :activitypub
-    @account.username     = @username
-    @account.domain       = @domain
-    @account.private_key  = nil
-    @account.suspended_at = domain_block.created_at if auto_suspend?
-    @account.silenced_at  = domain_block.created_at if auto_silence?
+    @account.protocol          = :activitypub
+    @account.username          = @username
+    @account.domain            = @domain
+    @account.private_key       = nil
+    @account.suspended_at      = domain_block.created_at if auto_suspend?
+    @account.suspension_origin = :local if auto_suspend?
+    @account.silenced_at       = domain_block.created_at if auto_silence?
+    @account.save
   end
 
   def update_account
     @account.last_webfingered_at = Time.now.utc unless @options[:only_key]
     @account.protocol            = :activitypub
 
-    set_immediate_attributes!
-    set_fetchable_attributes! unless @options[:only_keys]
+    set_suspension!
+    set_immediate_attributes! unless @account.suspended?
+    set_fetchable_attributes! unless @options[:only_keys] || @account.suspended?
 
     @account.save_with_optional_media!
   end
@@ -75,6 +81,7 @@ class ActivityPub::ProcessAccountService < BaseService
     @account.shared_inbox_url        = (@json['endpoints'].is_a?(Hash) ? @json['endpoints']['sharedInbox'] : @json['sharedInbox']) || ''
     @account.followers_url           = @json['followers'] || ''
     @account.featured_collection_url = @json['featured'] || ''
+    @account.devices_url             = @json['devices'] || ''
     @account.url                     = url || @uri
     @account.uri                     = @uri
     @account.display_name            = @json['name'] || ''
@@ -87,13 +94,26 @@ class ActivityPub::ProcessAccountService < BaseService
   end
 
   def set_fetchable_attributes!
-    @account.avatar_remote_url = image_url('icon')  unless skip_download?
-    @account.header_remote_url = image_url('image') unless skip_download?
+    @account.avatar_remote_url = image_url('icon')  || '' unless skip_download?
+    @account.header_remote_url = image_url('image') || '' unless skip_download?
     @account.public_key        = public_key || ''
     @account.statuses_count    = outbox_total_items    if outbox_total_items.present?
     @account.following_count   = following_total_items if following_total_items.present?
     @account.followers_count   = followers_total_items if followers_total_items.present?
+    @account.hide_collections  = following_private? || followers_private?
     @account.moved_to_account  = @json['movedTo'].present? ? moved_account : nil
+  end
+
+  def set_suspension!
+    return if @account.suspended? && @account.suspension_origin_local?
+
+    if @account.suspended? && !@json['suspended']
+      @account.unsuspend!
+      @suspension_changed = true
+    elsif !@account.suspended? && @json['suspended']
+      @account.suspend!(origin: :remote)
+      @suspension_changed = true
+    end
   end
 
   def after_protocol_change!
@@ -102,6 +122,14 @@ class ActivityPub::ProcessAccountService < BaseService
 
   def after_key_change!
     RefollowWorker.perform_async(@account.id)
+  end
+
+  def after_suspension_change!
+    if @account.suspended?
+      Admin::SuspensionWorker.perform_async(@account.id)
+    else
+      Admin::UnsuspensionWorker.perform_async(@account.id)
+    end
   end
 
   def check_featured_collection!
@@ -165,26 +193,36 @@ class ActivityPub::ProcessAccountService < BaseService
   end
 
   def outbox_total_items
-    collection_total_items('outbox')
+    collection_info('outbox').first
   end
 
   def following_total_items
-    collection_total_items('following')
+    collection_info('following').first
   end
 
   def followers_total_items
-    collection_total_items('followers')
+    collection_info('followers').first
   end
 
-  def collection_total_items(type)
-    return if @json[type].blank?
+  def following_private?
+    !collection_info('following').last
+  end
+
+  def followers_private?
+    !collection_info('followers').last
+  end
+
+  def collection_info(type)
+    return [nil, nil] if @json[type].blank?
     return @collections[type] if @collections.key?(type)
 
     collection = fetch_resource_without_id_validation(@json[type])
 
-    @collections[type] = collection.is_a?(Hash) && collection['totalItems'].present? && collection['totalItems'].is_a?(Numeric) ? collection['totalItems'] : nil
-  rescue HTTP::Error, OpenSSL::SSL::SSLError
-    @collections[type] = nil
+    total_items = collection.is_a?(Hash) && collection['totalItems'].present? && collection['totalItems'].is_a?(Numeric) ? collection['totalItems'] : nil
+    has_first_page = collection.is_a?(Hash) && collection['first'].present?
+    @collections[type] = [total_items, has_first_page]
+  rescue HTTP::Error, OpenSSL::SSL::SSLError, Mastodon::LengthValidationError
+    @collections[type] = [nil, nil]
   end
 
   def moved_account
@@ -212,6 +250,10 @@ class ActivityPub::ProcessAccountService < BaseService
 
   def key_changed?
     !@old_public_key.nil? && @old_public_key != @account.public_key
+  end
+
+  def suspension_changed?
+    @suspension_changed
   end
 
   def clear_tombstones!

@@ -72,8 +72,8 @@ eu:
     posts:
       one: Toot
       other: Toot
-    posts_tab_heading: Toot-ak
-    posts_with_replies: Toot-ak eta erantzunak
+    posts_tab_heading: Tootak
+    posts_with_replies: Tootak eta erantzunak
     reserved_username: Erabiltzaile-izena erreserbatuta dago
     roles:
       admin: Administratzailea
@@ -92,6 +92,7 @@ eu:
       delete: Ezabatu
       destroyed_msg: Moderazio ohara ongi suntsitu da!
     accounts:
+      add_email_domain_block: Sartu domeinua zerrenda beltzean
       approve: Onartu
       approve_all: Onartu denak
       are_you_sure: Ziur zaude?
@@ -172,6 +173,7 @@ eu:
         staff: Langilea
         user: Erabiltzailea
       search: Bilatu
+      search_same_email_domain: E-mail domeinu bera duten beste erabiltzailean
       search_same_ip: IP bera duten beste erabiltzaileak
       shared_inbox_url: Partekatutako sarrera ontziaren URL-a
       show:
@@ -193,6 +195,28 @@ eu:
       web: Weba
       whitelisted: Zerrenda zurian
     action_logs:
+      action_types:
+        assigned_to_self_report: Esleitu salaketa
+        change_email_user: Aldatu erabiltzailearen e-maila
+        confirm_user: Berretsi erabiltzailea
+        create_account_warning: Sortu abisua
+        create_announcement: Sortu iragarpena
+        create_custom_emoji: Sortu emoji pertsonalizatua
+        create_domain_allow: Sortu domeinu baimena
+        create_domain_block: Sortu domeinu blokeoa
+        create_email_domain_block: Sortu e-mail domeinu blokeoa
+        destroy_announcement: Ezabatu iragarpena
+        destroy_custom_emoji: Ezabatu emoji pertsonalizatua
+        destroy_domain_allow: Ezabatu domeinu baimena
+        destroy_domain_block: Ezabatu domeinu blokeoa
+        destroy_email_domain_block: Ezabatu e-mail domeinu blokeoa
+        destroy_status: Ezabatu mezua
+        disable_2fa_user: Desgaitu 2FA
+        disable_custom_emoji: Desgaitu emoji pertsonalizatua
+        disable_user: Desgaitu erabiltzailea
+        enable_custom_emoji: Gaitu emoji pertsonalizatua
+        enable_user: Gaitu erabiltzailea
+        update_announcement: Eguneratu iragarpena
       actions:
         assigned_to_self_report: "%{name}(e)k %{target} salaketa bere buruari esleitu dio"
         change_email_user: "%{name}(e)k %{target}(r)en e-mail helbidea aldatu du"
@@ -230,6 +254,9 @@ eu:
         update_custom_emoji: "%{name}(e)k %{target} emoji-a eguneratu du"
         update_status: "%{name} (e)k %{target}(r)en mezua aldatu du"
       deleted_status: "(ezabatutako mezua)"
+      empty: Ez da egunkaririk aurkitu.
+      filter_by_action: Iragazi ekintzen arabera
+      filter_by_user: Iragazi erabiltzaileen arabera
       title: Auditoria-egunkaria
     announcements:
       destroyed_msg: Iragarpena ongi ezabatu da!
@@ -358,6 +385,7 @@ eu:
       destroyed_msg: Ongi ezabatu da e-mail domeinua zerrenda beltzetik
       domain: Domeinua
       empty: Ez dago e-mail domeinurik zerrenda beltzean.
+      from_html: "%{domain} domeinutik"
       new:
         create: Gehitu domeinua
         title: Sarrera berria e-mail zerrenda beltzean
@@ -503,7 +531,7 @@ eu:
           open: Edonork eman dezake izena
         title: Erregistratzeko modua
       show_known_fediverse_at_about_page:
-        desc_html: Txandakatzean, fedibertso ezagun osoko toot-ak bistaratuko ditu aurrebistan. Bestela, toot lokalak besterik ez ditu erakutsiko.
+        desc_html: Txandakatzean, fedibertso ezagun osoko tootak bistaratuko ditu aurrebistan. Bestela, toot lokalak besterik ez ditu erakutsiko
         title: Erakutsi fedibertsu ezagun osoko denbora-lerroa aurrebistan
       show_staff_badge:
         desc_html: Erakutsi langile banda erabiltzailearen orrian
@@ -537,6 +565,9 @@ eu:
       trends:
         desc_html: Erakutsi publikoki orain joeran dauden aurretik errebisatutako traolak
         title: Traolak joeran
+    site_uploads:
+      delete: Ezabatu igotako fitxategia
+      destroyed_msg: Guneko igoera ongi ezabatu da!
     statuses:
       back_to_account: Atzera kontuaren orrira
       batch:
@@ -573,7 +604,6 @@ eu:
     warning_presets:
       add_new: Gehitu berria
       delete: Ezabatu
-      edit: Editatu
       edit_preset: Editatu abisu aurre-ezarpena
       title: Kudeatu abisu aurre-ezarpenak
   admin_mailer:
@@ -591,6 +621,7 @@ eu:
     add_new: Sortu ezizena
     created_msg: Ongi sortu da ezizena. Orain kontu zaharretik migratzen hasi zaitezke.
     deleted_msg: Ongi kendu da ezizena. Orain ezin izango da aurreko kontutik hona migratu.
+    empty: Ez duzu ezizenik.
     hint_html: Beste kontu batetik hona migratu nahi baduzu, hemen ezizen bat sortu dezakezu, hau beharrezkoa da kontu zaharreko jarraitzaileak hona ekartzeko. Ekintza hau berez <strong>kaltegabea eta desegingarria</strong> da. <strong>Kontuaren migrazioa kontu zaharretik abiatzen da</strong>.
     remove: Deslotu ezizena
   appearance:
@@ -661,6 +692,7 @@ eu:
     trouble_logging_in: Arazoak saioa hasteko?
   authorize_follow:
     already_following: Kontu hau aurretik jarraitzen duzu
+    already_requested: Bidali duzu dagoeneko kontu hori jarraitzeko eskaera bat
     error: Zoritxarrez, urruneko kontua bilatzean errore bat gertatu da
     follow: Jarraitu
     follow_request: 'Jarraitzeko eskari bat bidali duzu hona:'
@@ -804,6 +836,8 @@ eu:
     inactive: Ez aktiboa
     publicize_checkbox: 'Eta bidali toot hau:'
     publicize_toot: 'Frogatua dago! %{username} erabiltzailea naiz %{service} zerbitzuan: %{url}'
+    remove: Kendu froga kontutik
+    removed: Ongi kendu da froga kontutik
     status: Egiaztatze egoera
     view_proof: Ikusi froga
   imports:
@@ -849,6 +883,7 @@ eu:
   media_attachments:
     validations:
       images_and_video: Ezin da irudiak dituen mezu batean bideo bat erantsi
+      not_ready: Ezin dira prozesatzen amaitu gabeko fitxategiak erantsi. Saiatu geroago!
       too_many: Ezin dira 4 fitxategi baino gehiago erantsi
   migrations:
     acct: Kontu berriaren erabiltzaile@domeinua
@@ -1070,13 +1105,15 @@ eu:
     disallowed_hashtags:
       one: 'debekatutako traola bat zuen: %{tags}'
       other: 'debekatutako traola hauek zituen: %{tags}'
+    errors:
+      in_reply_not_found: Erantzuten saiatu zaren mezua antza ez da existitzen.
     language_detection: Antzeman hizkuntza automatikoki
     open_in_web: Ireki web-ean
     over_character_limit: "%{max}eko karaktere muga gaindituta"
     pin_errors:
       limit: Gehienez finkatu daitekeen toot kopurua finkatu duzu jada
       ownership: Ezin duzu beste norbaiten toot bat finkatu
-      private: Ezin dira publikoak ez diren toot-ak finkatu
+      private: Ezin dira publikoak ez diren tootak finkatu
       reblog: Bultzada bat ezin da finkatu
     poll:
       total_people:
@@ -1098,7 +1135,7 @@ eu:
       unlisted: Zerrendatu gabea
       unlisted_long: Edonork ikusi dezake, baina ez da denbora-lerro publikoetan agertzen
   stream_entries:
-    pinned: Finkatutako toot-a
+    pinned: Finkatutako toota
     reblogged: "(r)en bultzada"
     sensitive_content: 'Kontuz: Eduki hunkigarria'
   tags:
@@ -1195,21 +1232,14 @@ eu:
       default: "%Y(e)ko %b %d, %H:%M"
       month: "%Y(e)ko %b"
   two_factor_authentication:
-    code_hint: Sartu zure autentifikazio aplikazioak sortutako kodea berresteko
-    description_html: "<strong>Bi faktoreetako autentifikazioa</strong> gaitzen baduzu, saioa hasteko telefonoa eskura izan beharko duzu, honek zuk sartu behar dituzun kodeak sortuko dituelako."
     disable: Desgaitu
-    enable: Gaitu
     enabled: Bi faktoreetako autentifikazioa gaituta dago
     enabled_success: Bi faktoreetako autentifikazioa ongi gaitu da
     generate_recovery_codes: Sortu berreskuratze kodeak
-    instructions_html: "<strong>Eskaneatu QR kode hau Google Authentiocator edo antzeko TOTTP aplikazio batekin zure telefonoan</strong>. Hortik aurrera, aplikazio horrek saioa hasteko sartu behar dituzun kodeak sortuko ditu."
     lost_recovery_codes: Berreskuratze kodeek telefonoa galtzen baduzu kontura sarbidea berreskuratzea ahalbideko dizute. Berreskuratze kodeak galdu badituzu, hemen birsortu ditzakezu. Zure berreskuratze kode zaharrak indargabetuko dira,.
-    manual_instructions: 'Ezin baduzu QR kodea eskaneatu eta eskuz sartu behar baduzu, hona sekretua testu hutsean:'
     recovery_codes: Berreskuratze kodeen babes-kopia
     recovery_codes_regenerated: Berreskuratze kodeak ongi sortu dira
     recovery_instructions_html: Zure telefonora sarbidea galtzen baduzu, beheko berreskuratze kode bat erabili dezakezu kontura berriro sartu ahal izateko. <strong>Gore barreskuratze kodeak toki seguruan</strong>. Adibidez inprimatu eta dokumentu garrantzitsuekin batera gorde.
-    setup: Ezarri
-    wrong_code: Sartutako kodea baliogabea da! Zerbitzariaren eta gailuaren erlojuak ondo ezarrita daude?
   user_mailer:
     backup_ready:
       explanation: Zure Mastodon kontuaren babes-kopia osoa eskatu duzu. Deskargatzeko prest dago!
@@ -1218,7 +1248,7 @@ eu:
     warning:
       explanation:
         disable: Zure kontua izoztuta dagoen bitartean, zure kontua bere horretan dirau, baina ezin duzu ekintzarik burutu desblokeatzen den arte.
-        silence: Zure kontua murriztua dagoen bitartean, jada zu jarraitzen zaituztenak besterik ez dituzte zure Toot-ak ikusiko zerbitzari honetan, eta agian zerrenda publikoetatik kenduko zaizu. Hala ere besteek oraindik zu jarraitu zaitzakete.
+        silence: Zure kontua murriztua dagoen bitartean, jada zu jarraitzen zaituztenak besterik ez dituzte zure tootak ikusiko zerbitzari honetan, eta agian zerrenda publikoetatik kenduko zaizu. Hala ere besteek oraindik zu jarraitu zaitzakete.
         suspend: Zure kontua kanporatua izan da, zure toot guztiak eta multimedia fitxategiak behin betiko ezabatu dira zerbitzari honetatik, eta zure jarraitzaileen zerbitzarietatik.
       get_in_touch: "%{instance} instantziako jendearekin harremanetan jartzeko e-mail honi erantzun ahal diozu."
       review_server_policies: Berrikusi zerbitzariko politikak

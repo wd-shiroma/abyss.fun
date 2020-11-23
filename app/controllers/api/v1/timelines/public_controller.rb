@@ -4,8 +4,6 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   before_action :require_user!, only: [:show], if: :require_auth?
   after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
 
-  respond_to :json
-
   def show
     @statuses = load_statuses
     render json: @statuses, each_serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
@@ -18,34 +16,59 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def load_statuses
-    cached_public_statuses
+    cached_public_statuses_page
   end
 
-  def cached_public_statuses
-    cache_collection public_statuses, Status
+  def cached_public_statuses_page
+    cache_collection(public_statuses, Status)
   end
 
   def public_statuses
-    statuses = public_timeline_statuses.paginate_by_id(
-      limit_param(DEFAULT_STATUSES_LIMIT),
-      params_slice(:max_id, :since_id, :min_id)
-    )
-
-    if truthy_param?(:only_media)
-      # `SELECT DISTINCT id, updated_at` is too slow, so pluck ids at first, and then select id, updated_at with ids.
-      status_ids = statuses.joins(:media_attachments).distinct(:id).pluck(:id)
-      statuses.where(id: status_ids)
+    if truthy_param?(:local) then
+      local_feed.get(
+        limit_param(DEFAULT_STATUSES_LIMIT),
+        params[:max_id],
+        params[:since_id],
+        params[:min_id]
+      )
     else
-      statuses
+      public_feed.get(
+        limit_param(DEFAULT_STATUSES_LIMIT),
+        params[:max_id],
+        params[:since_id],
+        params[:min_id]
+      )
     end
   end
 
-  def public_timeline_statuses
-    if truthy_param?(:local) then
-      Status.as_tag_timeline(Tag.find_by(name: 'メイドインアビス'), current_account, false)
-    else
-      Status.as_public_timeline(current_account, truthy_param?(:local))
-    end
+#<<<<<<< HEAD
+#  def public_timeline_statuses
+#    if truthy_param?(:local) then
+#      Status.as_tag_timeline(Tag.find_by(name: 'メイドインアビス'), current_account, false)
+#    else
+#      Status.as_public_timeline(current_account, truthy_param?(:local))
+#    end
+#=======
+  def public_feed
+    PublicFeed.new(
+      current_account,
+      local: truthy_param?(:local),
+      remote: truthy_param?(:remote),
+      only_media: truthy_param?(:only_media)
+    )
+  end
+
+  def local_feed
+    TagFeed.new(
+      Tag.find_normalized('メイドインアビス'),
+      current_account,
+      any: params[:any],
+      all: params[:all],
+      none: params[:none],
+      local: truthy_param?(:local),
+      remote: truthy_param?(:remote),
+      only_media: truthy_param?(:only_media)
+    )
   end
 
   def insert_pagination_headers
@@ -53,7 +76,7 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.slice(:local, :limit, :only_media).permit(:local, :limit, :only_media).merge(core_params)
+    params.slice(:local, :remote, :limit, :only_media).permit(:local, :remote, :limit, :only_media).merge(core_params)
   end
 
   def next_path

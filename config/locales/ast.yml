@@ -173,6 +173,8 @@ ast:
       body_remote: Daquién dende %{domain} informó de %{target}
     new_trending_tag:
       body: 'Güei la etiqueta #%{name} ye tendencia pero nun se revisó anteriormente. Nun va amosase públicamente a nun ser que lo permitas o guardes el formulariu como ta pa nun saber más d''ello.'
+  aliases:
+    empty: Nun tienes nomatos.
   appearance:
     advanced_web_interface: Interfaz web avanzada
     advanced_web_interface_hint: 'Si quies asegúrate de que s''use tol anchor de la pantalla, la interfaz web avanzada permítete configurar munches columnes estremaes pa ver tanta información al empar como quieras: Aniciu, avisos, llinia temporal federada, cualesquier cantidá de llistes y etiquetes...'
@@ -197,6 +199,7 @@ ast:
     description:
       suffix: "¡Con una cuenta, vas ser a siguir a persones, espublizar anovamientos ya intercambiar mensaxes con usuarios de cualesquier sirvidor de Mastodon y más!"
     didnt_get_confirmation: "¿Nun recibiesti les instrucciones de confirmación?"
+    dont_have_your_security_key: "¿Nun tienes una clave de seguranza?"
     forgot_password: "¿Escaeciesti la contraseña?"
     login: Aniciar sesión
     migrate_account: Mudase a otra cuenta
@@ -209,6 +212,7 @@ ast:
     trouble_logging_in: "¿Problemes col aniciu de sesión?"
   authorize_follow:
     already_following: Yá tas siguiendo a esta cuenta
+    already_requested: Yá unviesti una solicitú de siguimientu a esa cuenta
     error: Desafortunadamente, hebo un fallu guetando la cuenta remota
     follow_request: 'Unviesti una solicitú de siguimientu a:'
     post_follow:
@@ -354,7 +358,7 @@ ast:
     errors:
       already_voted: Yá votesti nesta encuesta
       expired: La encuesta yá finó
-      invalid_choice: El la opción de votu escoyida nun esiste
+      invalid_choice: La opción de votu escoyida nun esiste
   preferences:
     public_timelines: Llinies temporales públiques
   relationships:
@@ -434,10 +438,14 @@ ast:
     preferences: Preferencies
     profile: Perfil
     two_factor_authentication: Autenticación en dos pasos
+    webauthn_authentication: Claves d'autenticación
   spam_check:
     spam_detected: Esto ye un informe automatizáu. Deteutóse spam.
   statuses:
     attached:
+      audio:
+        one: "%{count} audiu"
+        other: "%{count} audios"
       image:
         one: "%{count} imaxe"
         other: "%{count} imáxenes"
@@ -477,15 +485,14 @@ ast:
     default: Mastodon
     mastodon-light: Claridá
   two_factor_authentication:
-    code_hint: Introduz el códigu xeneráu pola aplicación autenticadora pa confirmar
     disable: Desactivar
     enabled: L'autenticación en dos pasos ta activada
     enabled_success: L'autenticación en dos pasos activóse con ésitu
     generate_recovery_codes: Xenerar códigos de recuperación
     lost_recovery_codes: Los códigos de recuperación permítente recuperar l'accesu a la cuenta si pierdes el teléfonu. Si tamién pierdes estos códigos, pues rexeneralos equí. Los códigos de recuperación vieyos van invalidase.
-    manual_instructions: 'Si nun pues escaniar el códigu QR y precises introducilu a mano, equí ta''l secretu en testu planu:'
     recovery_codes: Códigos de recuperación
     recovery_codes_regenerated: Los códigos de recuperación rexeneráronse con ésitu
+    webauthn: Claves d'autenticación
   user_mailer:
     warning:
       explanation:

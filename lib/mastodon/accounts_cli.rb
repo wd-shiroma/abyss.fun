@@ -87,7 +87,7 @@ module Mastodon
           say('Use --force to reattach it anyway and delete the other user')
           return
         elsif account.user.present?
-          account.user.destroy!
+          DeleteAccountService.new.call(account, reserve_email: false)
         end
       end
 
@@ -120,6 +120,7 @@ module Mastodon
     option :disable, type: :boolean
     option :disable_2fa, type: :boolean
     option :approve, type: :boolean
+    option :reset_password, type: :boolean
     desc 'modify USERNAME', 'Modify a user'
     long_desc <<-LONG_DESC
       Modify a user account.
@@ -138,6 +139,9 @@ module Mastodon
 
       With the --disable-2fa option, the two-factor authentication
       requirement for the user can be removed.
+
+      With the --reset-password option, the user's password is replaced by
+      a randomly-generated one, printed in the output.
     LONG_DESC
     def modify(username)
       user = Account.find_local(username)&.user
@@ -152,6 +156,8 @@ module Mastodon
         user.moderator = options[:role] == 'moderator'
       end
 
+      password = SecureRandom.hex if options[:reset_password]
+      user.password = password if options[:reset_password]
       user.email = options[:email] if options[:email]
       user.disabled = false if options[:enable]
       user.disabled = true if options[:disable]
@@ -161,6 +167,7 @@ module Mastodon
 
       if user.save
         say('OK', :green)
+        say("New password: #{password}") if options[:reset_password]
       else
         user.errors.to_h.each do |key, error|
           say('Failure/Error: ', :red)
@@ -185,7 +192,7 @@ module Mastodon
       end
 
       say("Deleting user with #{account.statuses_count} statuses, this might take a while...")
-      SuspendAccountService.new.call(account, reserve_email: false)
+      DeleteAccountService.new.call(account, reserve_email: false)
       say('OK', :green)
     end
 
@@ -238,7 +245,7 @@ module Mastodon
         end
 
         if [404, 410].include?(code)
-          SuspendAccountService.new.call(account, reserve_username: false) unless options[:dry_run]
+          DeleteAccountService.new.call(account, reserve_username: false) unless options[:dry_run]
           1
         else
           # Touch account even during dry run to avoid getting the account into the window again

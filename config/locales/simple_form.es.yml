@@ -8,6 +8,7 @@ es:
         acct: Especifique el nombre de usuario@dominio de la cuenta a la cual se desea migrar
       account_warning_preset:
         text: Puede usar sintaxis de toots, como URLs, hashtags y menciones
+        title: Opcional. No visible para el destinatario
       admin_account_action:
         include_statuses: El usuario verá qué toots han causado la acción de moderación o advertencia
         send_email_notification: El usuario recibirá una explicación de lo que sucedió con respecto a su cuenta
@@ -53,6 +54,9 @@ es:
         whole_word: Cuando la palabra clave o frase es solo alfanumérica, solo será aplicado si concuerda con toda la palabra
       domain_allow:
         domain: Este dominio podrá obtener datos de este servidor y los datos entrantes serán procesados y archivados
+      email_domain_block:
+        domain: Puede ser el nombre de dominio que aparece en la dirección de correo, el registro MX hacia el cual resuelve el dominio, o la IP del servidor hacia el cual resuelve ese registro MX. Esto se comprobará en el momento del alta del usuario y el alta se rechazará.
+        with_dns_records: Se hará un intento de resolver los registros DNS del dominio dado y los resultados serán también puestos en lista negra
       featured_tag:
         name: 'Puede que quieras usar uno de estos:'
       form_challenge:
@@ -61,8 +65,17 @@ es:
         data: Archivo CSV exportado desde otra instancia de Mastodon
       invite_request:
         text: Esto nos ayudará a revisar su aplicación
+      ip_block:
+        comment: Opcional. Recuerda por qué has añadido esta regla.
+        expires_in: Las direcciones IP son un recurso finito, a veces se comparten y a menudo cambian de manos. Por esta razón, no se recomiendan bloqueos de IP indefinida.
+        ip: Introduzca una dirección IPv4 o IPv6. Puede bloquear rangos completos usando la sintaxis CIDR. ¡Tenga cuidado de no quedarse fuera!
+        severities:
+          no_access: Bloquear acceso a todos los recursos
+          sign_up_requires_approval: Nuevos registros requerirán su aprobación
+        severity: Elegir lo que pasará con las peticiones desde esta IP
       sessions:
         otp: 'Introduce el código de autenticación de dos factores generado por tu aplicación de teléfono o usa uno de tus códigos de recuperación:'
+        webauthn: Si es una tecla USB, asegúrese de insertarla y, si es necesario, púlsela.
       tag:
         name: Sólo se puede cambiar el cajón de las letras, por ejemplo, para que sea más legible
       user:
@@ -78,6 +91,7 @@ es:
         acct: Maneja la cuenta nueva
       account_warning_preset:
         text: Texto predefinido
+        title: Título
       admin_account_action:
         include_statuses: Incluir en el correo electrónico a los toots denunciados
         send_email_notification: Notificar al usuario por correo electrónico
@@ -86,6 +100,7 @@ es:
         types:
           disable: Deshabilitar
           none: No hacer nada
+          sensitive: Sensible
           silence: Silenciar
           suspend: Suspender y eliminar de forma irreversible la información de la cuenta
         warning_preset_id: Usar un aviso predeterminado
@@ -130,6 +145,7 @@ es:
         setting_default_privacy: Privacidad de publicaciones
         setting_default_sensitive: Marcar siempre imágenes como sensibles
         setting_delete_modal: Mostrar diálogo de confirmación antes de borrar un toot
+        setting_disable_swiping: Deshabilitar movimientos de deslizamiento
         setting_display_media: Visualización multimedia
         setting_display_media_default: Por defecto
         setting_display_media_hide_all: Ocultar todo
@@ -146,10 +162,13 @@ es:
         setting_use_blurhash: Mostrar gradientes coloridos para contenido multimedia oculto
         setting_use_pending_items: Modo lento
         severity: Severidad
+        sign_in_token_attempt: Código de seguridad
         type: Importar tipo
         username: Nombre de usuario
         username_or_email: Usuario o Email
         whole_word: Toda la palabra
+      email_domain_block:
+        with_dns_records: Incluye los registros MX y las IP del dominio
       featured_tag:
         name: Etiqueta
       interactions:
@@ -160,6 +179,13 @@ es:
         comment: Comentar
       invite_request:
         text: "¿Por qué quiere unirse usted?"
+      ip_block:
+        comment: Comentario
+        ip: IP
+        severities:
+          no_access: Bloquear acceso
+          sign_up_requires_approval: Limitar registros
+        severity: Regla
       notification_emails:
         digest: Enviar resumen de correos electrónicos
         favourite: Enviar correo electrónico cuando alguien de a favorito en su publicación
@@ -180,4 +206,7 @@ es:
     required:
       mark: "*"
       text: necesario
+    title:
+      sessions:
+        webauthn: Utilice una de sus claves de seguridad para iniciar sesión
     'yes': Sí

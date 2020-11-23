@@ -1,4 +1,5 @@
-import { delegate } from 'rails-ujs';
+import './public-path';
+import { delegate } from '@rails/ujs';
 import ready from '../mastodon/ready';
 
 const batchCheckboxClassName = '.batch-checkbox input[type="checkbox"]';
@@ -28,6 +29,10 @@ delegate(document, '.media-spoiler-hide-button', 'click', () => {
   [].forEach.call(document.querySelectorAll('.spoiler-button.spoiler-button--visible button'), (element) => {
     element.click();
   });
+});
+
+delegate(document, '.filter-subset--with-select select', 'change', ({ target }) => {
+  target.form.submit();
 });
 
 const onDomainBlockSeverityChange = (target) => {

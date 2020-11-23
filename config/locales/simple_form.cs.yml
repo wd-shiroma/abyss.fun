@@ -8,6 +8,7 @@ cs:
         acct: Zadejte svůj účet, na který se chcete přesunout, ve formátu přezdívka@doména
       account_warning_preset:
         text: Můžete používat syntaxi tootů, jako například URL, hashtagy a zmínky
+        title: Nepovinné. Není viditelné pro příjemce
       admin_account_action:
         include_statuses: Uživatel uvidí, které tooty způsobily moderátorskou akci nebo varování
         send_email_notification: Uživatel obdrží vysvětlení toho, co se stalo s jeho účtem
@@ -53,6 +54,9 @@ cs:
         whole_word: Je-li klíčové slovo či fráze pouze alfanumerická, bude aplikována pouze, pokud se shoduje s celým slovem
       domain_allow:
         domain: Tato doména bude moci stahovat data z tohoto serveru a příchozí data z ní budou zpracována a uložena
+      email_domain_block:
+        domain: Toto může být název domény v e-mailové adresy, její MX záznam nebo IP adresa odpovídající MX záznamu. Při registraci uživatele dojde k jejich kontrole a registrace bude zamítnuta.
+        with_dns_records: Dojde k pokusu o zjištění DNS záznamů dané domény a výsledek bude rovněž přidán do seznamu
       featured_tag:
         name: 'Nejspíš budete chtít použít jeden z těchto:'
       form_challenge:
@@ -78,6 +82,7 @@ cs:
         acct: Adresa nového účtu
       account_warning_preset:
         text: Text předlohy
+        title: Nadpis
       admin_account_action:
         include_statuses: Zahrnout v e-mailu nahlášené tooty
         send_email_notification: Informovat uživatele e-mailem
@@ -146,10 +151,13 @@ cs:
         setting_use_blurhash: Zobrazit pro skrytá média barevné gradienty
         setting_use_pending_items: Pomalý režim
         severity: Vážnost
+        sign_in_token_attempt: Bezpečnostní kód
         type: Typ importu
         username: Uživatelské jméno
         username_or_email: Uživatelské jméno nebo e-mail
         whole_word: Celé slovo
+      email_domain_block:
+        with_dns_records: Zahrnout MX záznamy a IP adresy domény
       featured_tag:
         name: Hashtag
       interactions:
