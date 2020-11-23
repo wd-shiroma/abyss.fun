@@ -43,16 +43,15 @@ class ProcessHashtagsService < BaseService
         keyword_ma: [ 'クオンガタリ', 'タケグマ', 'タマウガチ', 'ネリタンタン', 'ベニクチナワ', 'リュウサザイ' ]
     }, {
         keyword_tag: "mia_place",
-        keyword_re: %r{ベルチェロ孤児院|シーカーキャンプ|監視基地|前線基地|[な成慣]れ[果は]て村|目の奥|[一二三四五六七1-7１-７]層|アビスの淵|誘いの森|大断層|巨人の盃|なきがらの海|還らずの都|最果ての渦|奈落の
-底|船団キャラバン},
+        keyword_re: %r{ベルチェロ孤児院|シーカーキャンプ|監視基地|前線基地|[な成慣]れ[果は]て村|目の奥|[一二三四五六七1-7１-７]層|アビスの淵|誘いの森|大断層|巨人の盃|なきがらの海|還らずの都|最果ての渦|奈落の底|船団キャラバン},
         keyword_ma: [ 'オース', 'イドフロント', 'ドグーブ', 'ショウロウ' ]
     }, {
         keyword_tag: "mia_nether_gryph",
         keyword_re: %r(奈落文字|悠遠の文字|:nrk[0-9a-f]{4}:),
         keyword_ma: [ 'ネザーグリフ', 'ビヨンドグリフ' ]
     }, {
-        keyword_re: %r{竹書房|キネマシトラス|上昇負荷|呪い|[電伝]報船|力場|[な成慣]れ[果は]て|不屈の花|お祈り骸骨|鈴付き|[赤青蒼月黒白]笛|探窟家|度し難|奈落シチュー|ラストダイブ|絶界行|メイドインアビス},
-        keyword_ma: [ 'アビス', 'トコシエコウ', 'んなぁ', 'メイアビ', 'メイドインアビス' ]
+        keyword_re: %r{竹書房|キネマシトラス|上昇負荷|[電伝]報船|力場|[な成慣]れ[果は]て|不屈の花|お祈り骸骨|鈴付き|[赤青蒼月黒白]笛|探窟家|度し難|奈落シチュー|ラストダイブ|絶界行|メイドインアビス},
+        keyword_ma: [ 'アビス', 'トコシエコウ', 'んなぁ[-～~－ー]', 'メイアビ', 'メイドインアビス' ]
     },
   ]
 
@@ -65,7 +64,7 @@ class ProcessHashtagsService < BaseService
 
     is_keyword = false
 
-    if status.local? && !status.reply? then
+    if !status.reply? then
       tagger = MeCab::Tagger.new
       node = tagger.parseToNode(status.text)
 
