@@ -36,11 +36,11 @@ class Api::V1::StatusesController < Api::BaseController
 
   def create
     @status = PostStatusService.new.call(current_user.account,
-                                         text: status_params[:status].gsub(/(\@[a-zA-Z0-9_]+(?:\@[a-zA-Z0-9_\-.]+)? )?.*?([～ー…]*)([。、！？!?]+)|.+$/, '\1んなぁ\2\3'),
+                                         text: status_params[:status].gsub(/(\@[a-zA-Z0-9_]+(?:\@[a-zA-Z0-9_\-.]+)? )?.*?([～ー…。、！？!?]+)|.+$/, '\1んなぁ\2'),
                                          thread: @thread,
                                          media_ids: status_params[:media_ids],
                                          sensitive: status_params[:sensitive],
-                                         spoiler_text: status_params[:spoiler_text].length > 0 ? status_params[:spoiler_text].gsub(/(\@[a-zA-Z0-9_]+(?:\@[a-zA-Z0-9_\-.]+)? )?.*?([～ー…]*)([。、！？!?]+)|.+$/, '\1んなぁ\2\3') : '',
+                                         spoiler_text: status_params[:spoiler_text].length > 0 ? status_params[:spoiler_text].gsub(/(\@[a-zA-Z0-9_]+(?:\@[a-zA-Z0-9_\-.]+)? )?.*?([ー～。、！？!?]+)|.+$/, '\1んなぁ\2') : '',
                                          visibility: status_params[:visibility],
                                          scheduled_at: status_params[:scheduled_at],
                                          application: doorkeeper_token.application,
