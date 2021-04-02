@@ -51,7 +51,7 @@ class ProcessHashtagsService < BaseService
         keyword_ma: [ 'ネザーグリフ', 'ビヨンドグリフ' ]
     }, {
         keyword_re: %r{竹書房|キネマシトラス|上昇負荷|[電伝]報船|力場|[な成慣]れ[果は]て|不屈の花|お祈り骸骨|鈴付き|[赤青蒼月黒白]笛|探窟家|度し難|奈落シチュー|ラストダイブ|絶界行|メイドインアビス},
-        keyword_ma: [ 'アビス', 'トコシエコウ', 'んなぁ[-～~－ー]', 'メイアビ', 'メイドインアビス' ]
+        keyword_ma: [ 'アビス', 'トコシエコウ', 'んなぁ', 'メイアビ', 'メイドインアビス' ]
     },
   ]
 
@@ -69,6 +69,14 @@ class ProcessHashtagsService < BaseService
       node = tagger.parseToNode(status.text)
 
       status_words = []
+      while node do
+        features = node.feature.split(',')
+        status_words.push(features[6]) if features[9] == 'メイドインアビス辞書'
+        node = node.next
+      end
+
+      node = tagger.parseToNode(status.spoiler_text)
+
       while node do
         features = node.feature.split(',')
         status_words.push(features[6]) if features[9] == 'メイドインアビス辞書'
